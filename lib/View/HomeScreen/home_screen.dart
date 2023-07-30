@@ -23,10 +23,33 @@ class _HomeScreenState extends State<HomeScreen> {
             if (controller.apiResponse.status == Status.COMPLETE) {
               ProductResponseModel data = controller.apiResponse.data;
 
-              return Text(data.products[0].title);
+              return GridView.builder(
+                shrinkWrap: true,
+                itemCount: data.products.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio:2/2.2,
+                ),
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      Container(
+                        height: 200,
+                        width: 180,
+                        child: Image.network(
+                          data.products[index].thumbnail,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
             } else if (controller.apiResponse.status == Status.LOADING) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  color: Colors.blue,
+                ),
               );
             } else if (controller.apiResponse.status == Status.ERROR) {
               return Center(
